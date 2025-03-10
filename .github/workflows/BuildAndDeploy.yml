@@ -20,8 +20,8 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
-        working-directory: ./SpeechHelp
+        working-directory: SpeechHelp
 
       - name: Build Project
         run: npm run build
-        working-directory: ./SpeechHelp
+        working-directory: SpeechHelp
