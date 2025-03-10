@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import elephantImage from './assets/beginner/elephant.jpg';
+import './App.scss'; // Import SCSS file
 
 const SpeechLearningApp = () => {
   const [selectedLevel, setSelectedLevel] = useState(null);
@@ -203,16 +204,17 @@ const SpeechLearningApp = () => {
     if (!selectedLevel) return null;
     
     return (
-      <div className="bg-blue-100 p-4 rounded-xl mb-4">
-        <h3 className="text-lg font-bold mb-2">Mile View Progress</h3>
-        <div className="flex space-x-2 overflow-x-auto pb-2">
+      <div className="mile-view">
+        <h3>Mile View Progress</h3>
+        <div className="question-indicators">
           {questions[selectedLevel].map((q, index) => (
             <div 
               key={index} 
-              className={`flex-shrink-0 w-20 h-20 flex items-center justify-center rounded-lg 
-                ${index < currentQuestion ? 'bg-green-500 text-white' : 
-                  index === currentQuestion ? 'bg-yellow-500 text-white' : 
-                  'bg-gray-300'}`}
+              className={`question-indicator ${
+                index < currentQuestion ? 'completed' : 
+                index === currentQuestion ? 'current' : 
+                'pending'
+              }`}
             >
               Q{index + 1}
             </div>
@@ -222,27 +224,34 @@ const SpeechLearningApp = () => {
     );
   };
 
+  // Get feedback class based on message content
+  const getFeedbackClass = () => {
+    if (feedback.includes("Great")) return "success";
+    if (feedback.includes("listening")) return "listening";
+    return "warning";
+  };
+
   return (
-    <div className="max-w-md mx-auto p-4 bg-white rounded-lg shadow-lg font-sans">
-      <header className="bg-green-500 p-4 rounded-lg text-white mb-6">
-        <h1 className="text-2xl font-bold">Fun Speech Learning for Kids</h1>
+    <div className="speech-learning-app">
+      <header>
+        <h1>Fun Speech Learning for Kids</h1>
       </header>
       
       {/* View Mode Toggle */}
-      <div className="mb-4 flex justify-between items-center">
+      <div className="controls">
         <button 
           onClick={toggleViewMode} 
-          className="bg-purple-500 text-white px-3 py-1 rounded-md text-sm"
+          className="view-toggle"
         >
           {viewMode === 'standard' ? 'Switch to Mile View' : 'Switch to Standard View'}
         </button>
         
         {selectedLevel && (
-          <div className="flex items-center">
-            <span className="mr-2 text-sm">Auto Listen:</span>
+          <div className="auto-listen">
+            <span>Auto Listen:</span>
             <button 
               onClick={() => setAutoListenEnabled(!autoListenEnabled)}
-              className={`px-3 py-1 rounded-md text-sm text-white ${autoListenEnabled ? 'bg-green-500' : 'bg-gray-500'}`}
+              className={autoListenEnabled ? 'enabled' : 'disabled'}
             >
               {autoListenEnabled ? 'On' : 'Off'}
             </button>
@@ -255,24 +264,24 @@ const SpeechLearningApp = () => {
       
       {/* Level Selection */}
       {!selectedLevel && (
-        <div className="text-center py-6">
-          <h2 className="text-xl font-bold mb-6">Choose Your Level</h2>
-          <div className="flex flex-col space-y-4">
+        <div className="level-selection">
+          <h2>Choose Your Level</h2>
+          <div className="level-buttons">
             <button 
               onClick={() => setSelectedLevel('beginner')}
-              className="bg-green-500 hover:bg-green-600 text-white py-3 px-6 rounded-xl font-bold text-lg transition-transform hover:scale-105"
+              className="level-button beginner"
             >
               Beginner
             </button>
             <button 
               onClick={() => setSelectedLevel('intermediate')}
-              className="bg-blue-500 hover:bg-blue-600 text-white py-3 px-6 rounded-xl font-bold text-lg transition-transform hover:scale-105"
+              className="level-button intermediate"
             >
               Intermediate
             </button>
             <button 
               onClick={() => setSelectedLevel('expert')}
-              className="bg-red-500 hover:bg-red-600 text-white py-3 px-6 rounded-xl font-bold text-lg transition-transform hover:scale-105"
+              className="level-button expert"
             >
               Expert
             </button>
@@ -283,28 +292,25 @@ const SpeechLearningApp = () => {
       {/* Game View */}
       {selectedLevel && (
         <div className="game-view">
-          <h2 className="text-xl font-bold mb-4 text-center capitalize">{selectedLevel} Level</h2>
+          <h2>{selectedLevel} Level</h2>
           
-          <div className="bg-gray-100 p-4 rounded-xl mb-4">
-            <div className="text-sm text-gray-600 mb-2">
+          <div className="question-container">
+            <div className="question-counter">
               Question {currentQuestion + 1} of {questions[selectedLevel].length}
             </div>
             
-            <div className="mb-4 flex justify-center">
+            <div className="question-image">
               <img 
                 src={questions[selectedLevel][currentQuestion].image}
                 alt="Question"
-                className="rounded-lg max-h-48 shadow-md"
               />
             </div>
             
-            <div className="text-center mb-4 relative">
-              <p className="text-xl font-medium">
-                {questions[selectedLevel][currentQuestion].question}
-              </p>
+            <div className="question-text">
+              <p>{questions[selectedLevel][currentQuestion].question}</p>
               <button 
                 onClick={handleRepeatQuestion} 
-                className="absolute right-0 top-0 text-blue-500"
+                className="repeat-button"
                 aria-label="Repeat question"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -314,35 +320,27 @@ const SpeechLearningApp = () => {
               </button>
             </div>
             
-            <div className="min-h-12 text-center my-4">
+            <div className="feedback-area">
               {feedback && (
-                <p className={`text-lg font-bold ${
-                  feedback.includes("Great") ? "text-green-600" : 
-                  feedback.includes("listening") ? "text-blue-600" : 
-                  "text-orange-600"
-                }`}>
+                <p className={getFeedbackClass()}>
                   {feedback}
                 </p>
               )}
             </div>
             
-            <div className={`w-24 h-24 mx-auto rounded-full flex items-center justify-center ${
-              listening ? 'bg-red-100 border-4 border-red-500 animate-pulse' : 'bg-gray-100'
-            }`}>
-              <div className={`w-16 h-16 rounded-full ${
-                listening ? 'bg-red-500' : 'bg-gray-300'
-              }`}></div>
+            <div className={`microphone ${listening ? 'active' : ''}`}>
+              <div className="mic-inner"></div>
             </div>
             
-            <div className="text-center text-gray-600 mt-4">
+            <div className="attempts-counter">
               Attempts: {attempts} / 5
             </div>
           </div>
           
-          <div className="text-center">
+          <div className="navigation">
             <button
               onClick={handleBackToLevels}
-              className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors"
+              className="back-button"
             >
               Back to Levels
             </button>
@@ -365,8 +363,8 @@ const SpeechLearningApp = () => {
       </audio>
       
       {/* Preview Info */}
-      <div className="mt-8 border-t pt-4 text-sm text-gray-600">
-        <p className="font-bold">Preview Mode:</p>
+      <div className="preview-info">
+        <p className="preview-heading">Preview Mode:</p>
         <p>This is a functional preview of the speech learning app with audio features.</p>
         <p>The app now reads questions aloud and provides audio feedback.</p>
         <p>Click the repeat button next to the question to hear it again.</p>
