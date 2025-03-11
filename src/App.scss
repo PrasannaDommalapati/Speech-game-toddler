@@ -1,361 +1,477 @@
-// SpeechLearningApp.scss
-
-// Variables
-$primary-color: #22c55e; // green-500
-$secondary-color: #3b82f6; // blue-500
-$expert-color: #ef4444; // red-500
-$background-color: #ffffff;
-$light-bg-color: #f3f4f6; // gray-100
-$blue-light-bg: #dbeafe; // blue-100
-$text-color: #111827;
-$light-text-color: #4b5563; // gray-600
-
-// Mixins
-@mixin flex-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-@mixin button-style {
-  font-weight: bold;
-  border-radius: 0.75rem;
-  padding: 0.75rem 1.5rem;
-  color: white;
-  transition: transform 0.2s, background-color 0.2s;
-  cursor: pointer;
-  border: none;
-  
-  &:hover {
-    transform: scale(1.05);
-  }
-}
-
-// Main container
+// App.scss
 .speech-learning-app {
-  max-width: 28rem;
+  max-width: 800px;
   margin: 0 auto;
-  padding: 1rem;
-  background-color: $background-color;
-  border-radius: 0.5rem;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  font-family: sans-serif;
-  
-  // Header
+  padding: 20px;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  background-color: #f9f9f9;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
   header {
-    background-color: $primary-color;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    margin-bottom: 1.5rem;
-    
+    text-align: center;
+    margin-bottom: 30px;
+
     h1 {
-      color: white;
-      font-size: 1.5rem;
-      font-weight: bold;
-      margin: 0;
+      color: #ff6b6b;
+      font-size: 2.5rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      
+      @media (max-width: 768px) {
+        font-size: 2rem;
+      }
+      
+      @media (max-width: 480px) {
+        font-size: 1.8rem;
+      }
     }
   }
-  
-  // Controls section
+
   .controls {
-    margin-bottom: 1rem;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
     
-    .view-toggle {
-      background-color: #a855f7; // purple-500
-      color: white;
-      padding: 0.25rem 0.75rem;
-      border-radius: 0.375rem;
-      font-size: 0.875rem;
-      border: none;
-      cursor: pointer;
+    @media (max-width: 480px) {
+      flex-direction: column;
+      align-items: center;
     }
-    
+
+    .view-toggle {
+      background-color: #74b9ff;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: #0984e3;
+      }
+    }
+
     .auto-listen {
       display: flex;
       align-items: center;
-      
+      gap: 10px;
+
       span {
-        margin-right: 0.5rem;
-        font-size: 0.875rem;
+        font-weight: bold;
       }
-      
+
       button {
-        padding: 0.25rem 0.75rem;
-        border-radius: 0.375rem;
-        font-size: 0.875rem;
-        color: white;
+        background-color: #dfe6e9;
         border: none;
+        padding: 5px 10px;
+        border-radius: 15px;
         cursor: pointer;
-        
+        transition: all 0.3s;
+
         &.enabled {
-          background-color: $primary-color;
+          background-color: #55efc4;
+          color: #2d3436;
         }
-        
+
         &.disabled {
-          background-color: #6b7280; // gray-500
+          background-color: #fab1a0;
+          color: #2d3436;
         }
       }
     }
   }
-  
-  // Mile View
-  .mile-view {
-    background-color: $blue-light-bg;
-    padding: 1rem;
-    border-radius: 0.75rem;
-    margin-bottom: 1rem;
-    
-    h3 {
-      font-size: 1.125rem;
-      font-weight: bold;
-      margin-bottom: 0.5rem;
-    }
-    
-    .question-indicators {
-      display: flex;
-      gap: 0.5rem;
-      overflow-x: auto;
-      padding-bottom: 0.5rem;
-      
-      .question-indicator {
-        flex-shrink: 0;
-        width: 5rem;
-        height: 5rem;
-        @include flex-center;
-        border-radius: 0.5rem;
-        
-        &.completed {
-          background-color: $primary-color;
-          color: white;
-        }
-        
-        &.current {
-          background-color: #eab308; // yellow-500
-          color: white;
-        }
-        
-        &.pending {
-          background-color: #d1d5db; // gray-300
-        }
-      }
-    }
-  }
-  
-  // Level Selection
+
   .level-selection {
     text-align: center;
-    padding: 1.5rem 0;
-    
+    margin: 40px 0;
+
     h2 {
-      font-size: 1.25rem;
-      font-weight: bold;
-      margin-bottom: 1.5rem;
+      color: #6c5ce7;
+      margin-bottom: 20px;
+      font-size: 2rem;
+      
+      @media (max-width: 480px) {
+        font-size: 1.6rem;
+      }
     }
-    
+
     .level-buttons {
       display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+
       .level-button {
-        @include button-style;
-        font-size: 1.125rem;
+        padding: 15px 30px;
+        font-size: 1.2rem;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: transform 0.3s, box-shadow 0.3s;
+        font-weight: bold;
+        min-width: 200px;
         
+        @media (max-width: 480px) {
+          min-width: 150px;
+          padding: 12px 20px;
+          font-size: 1rem;
+        }
+
+        &:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
         &.beginner {
-          background-color: $primary-color;
-          
-          &:hover {
-            background-color: darken($primary-color, 5%);
-          }
+          background-color: #55efc4;
+          color: #2d3436;
         }
-        
+
         &.intermediate {
-          background-color: $secondary-color;
-          
-          &:hover {
-            background-color: darken($secondary-color, 5%);
-          }
+          background-color: #ffeaa7;
+          color: #2d3436;
         }
-        
+
         &.expert {
-          background-color: $expert-color;
-          
-          &:hover {
-            background-color: darken($expert-color, 5%);
-          }
+          background-color: #fab1a0;
+          color: #2d3436;
         }
       }
     }
   }
-  
-  // Game View
-  .game-view {
-    h2 {
-      font-size: 1.25rem;
-      font-weight: bold;
-      margin-bottom: 1rem;
+
+  .mile-view {
+    background-color: white;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    overflow-x: auto; /* Add horizontal scroll for small screens */
+
+    h3 {
+      color: #6c5ce7;
+      margin-bottom: 10px;
       text-align: center;
-      text-transform: capitalize;
     }
-    
-    .question-container {
-      background-color: $light-bg-color;
-      padding: 1rem;
-      border-radius: 0.75rem;
-      margin-bottom: 1rem;
+
+    .question-indicators {
+      display: flex;
+      justify-content: space-between;
+      margin: 0 auto;
+      max-width: 500px;
+      min-width: 300px; /* Ensure minimum width for small screens */
+      padding: 10px 0;
       
-      .question-counter {
-        font-size: 0.875rem;
-        color: $light-text-color;
-        margin-bottom: 0.5rem;
+      @media (max-width: 480px) {
+        /* On mobile, ensure spacing and scrolling work properly */
+        justify-content: flex-start;
+        gap: 40px; /* Fixed gap between indicators */
+        width: fit-content;
       }
-      
-      .question-image {
-        margin-bottom: 1rem;
+
+      .question-indicator {
+        width: 40px;
+        height: 40px;
         display: flex;
+        align-items: center;
         justify-content: center;
-        
-        img {
-          border-radius: 0.5rem;
-          max-height: 12rem;
-          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-      }
-      
-      .question-text {
-        text-align: center;
-        margin-bottom: 1rem;
-        position: relative;
-        
-        p {
-          font-size: 1.25rem;
-          font-weight: 500;
-        }
-        
-        .repeat-button {
-          position: absolute;
-          right: 0;
-          top: 0;
-          color: $secondary-color;
-          background: none;
-          border: none;
-          cursor: pointer;
-        }
-      }
-      
-      .feedback-area {
-        min-height: 3rem;
-        text-align: center;
-        margin: 1rem 0;
-        
-        p {
-          font-size: 1.125rem;
-          font-weight: bold;
-          
-          &.success {
-            color: #16a34a; // green-600
-          }
-          
-          &.listening {
-            color: #2563eb; // blue-600
-          }
-          
-          &.warning {
-            color: #ea580c; // orange-600
-          }
-        }
-      }
-      
-      .microphone {
-        width: 6rem;
-        height: 6rem;
-        margin: 0 auto;
         border-radius: 50%;
-        @include flex-center;
-        background-color: $light-bg-color;
-        
-        &.active {
-          background-color: #fee2e2; // red-100
-          border: 4px solid #ef4444; // red-500
+        font-weight: bold;
+        position: relative;
+        flex-shrink: 0; /* Prevent shrinking on small screens */
+
+        &::after {
+          content: '';
+          position: absolute;
+          height: 2px;
+          background-color: #dfe6e9;
+          width: 100%;
+          left: 100%;
+          top: 50%;
+          transform: translateY(-50%);
+          
+          @media (max-width: 480px) {
+            width: 40px; /* Fixed width for connector on mobile */
+          }
+        }
+
+        &:last-child::after {
+          display: none;
+        }
+
+        &.completed {
+          background-color: #55efc4;
+          color: #2d3436;
+        }
+
+        &.current {
+          background-color: #74b9ff;
+          color: white;
           animation: pulse 2s infinite;
         }
-        
-        .mic-inner {
-          width: 4rem;
-          height: 4rem;
-          border-radius: 50%;
-          background-color: #d1d5db; // gray-300
-          
-          .active & {
-            background-color: #ef4444; // red-500
-          }
-        }
-      }
-      
-      .attempts-counter {
-        text-align: center;
-        color: $light-text-color;
-        margin-top: 1rem;
-      }
-    }
-    
-    .navigation {
-      text-align: center;
-      
-      .back-button {
-        background-color: #6b7280; // gray-500
-        color: white;
-        padding: 0.5rem 1rem;
-        border-radius: 0.5rem;
-        border: none;
-        transition: background-color 0.2s;
-        cursor: pointer;
-        
-        &:hover {
-          background-color: #4b5563; // gray-600
+
+        &.pending {
+          background-color: #dfe6e9;
+          color: #636e72;
         }
       }
     }
   }
-  
-  // Hidden audio elements
+
+  .game-view {
+    background-color: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    
+    @media (max-width: 480px) {
+      padding: 15px 10px;
+    }
+
+    h2 {
+      color: #6c5ce7;
+      text-align: center;
+      margin-bottom: 20px;
+      
+      @media (max-width: 480px) {
+        font-size: 1.4rem;
+      }
+    }
+
+    .question-container {
+      position: relative;
+      padding: 20px;
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      
+      @media (max-width: 480px) {
+        padding: 15px 10px;
+      }
+
+      .question-counter {
+        position: absolute;
+        top: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #74b9ff;
+        color: white;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-weight: bold;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        white-space: nowrap;
+      }
+
+      .question-image {
+        text-align: center;
+        margin: 20px 0;
+
+        img {
+          max-width: 100%;
+          border-radius: 10px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          max-height: 300px;
+        }
+      }
+
+      .question-text {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 20px 0;
+        position: relative;
+
+        p {
+          font-size: 1.5rem;
+          color: #2d3436;
+          text-align: center;
+          margin-right: 10px;
+          
+          @media (max-width: 480px) {
+            font-size: 1.2rem;
+          }
+        }
+
+        .repeat-button {
+          background-color: #a29bfe;
+          color: white;
+          border: none;
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: background-color 0.3s;
+          flex-shrink: 0;
+
+          &:hover {
+            background-color: #6c5ce7;
+          }
+        }
+      }
+
+      .feedback-area {
+        text-align: center;
+        min-height: 60px;
+        margin: 20px 0;
+
+        p {
+          font-size: 1.2rem;
+          padding: 10px;
+          border-radius: 10px;
+          display: inline-block;
+          margin-bottom: 10px;
+          
+          @media (max-width: 480px) {
+            font-size: 1rem;
+            padding: 8px;
+          }
+
+          &.success {
+            background-color: #55efc4;
+            color: #2d3436;
+            animation: bounce 1s;
+          }
+
+          &.warning {
+            background-color: #ffeaa7;
+            color: #2d3436;
+          }
+
+          &.listening {
+            background-color: #74b9ff;
+            color: white;
+            animation: pulse 1.5s infinite;
+          }
+        }
+
+        .user-answer {
+          font-style: italic;
+          color: #636e72;
+        }
+      }
+
+      .microphone {
+        width: 80px;
+        height: 80px;
+        background-color: #dfe6e9;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 20px auto;
+        transition: all 0.3s;
+
+        .mic-inner {
+          width: 40px;
+          height: 40px;
+          background-color: #636e72;
+          border-radius: 50%;
+          transition: all 0.3s;
+        }
+
+        &.active {
+          background-color: #ff7675;
+          animation: pulse 1.5s infinite;
+
+          .mic-inner {
+            background-color: #d63031;
+          }
+        }
+      }
+
+      .attempts-counter {
+        text-align: center;
+        color: #636e72;
+        font-weight: bold;
+      }
+
+      .listen-button {
+        display: block;
+        margin: 20px auto 0;
+        background-color: #a29bfe;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 20px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s;
+
+        &:hover {
+          background-color: #6c5ce7;
+        }
+      }
+    }
+
+    .navigation {
+      display: flex;
+      justify-content: center;
+
+      .back-button {
+        background-color: #ff6b6b;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 20px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s;
+
+        &:hover {
+          background-color: #d63031;
+        }
+      }
+    }
+  }
+
+  .preview-info {
+    margin-top: 40px;
+    border-top: 2px dashed #dfe6e9;
+    padding-top: 20px;
+    color: #636e72;
+
+    .preview-heading {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin-bottom: 5px;
+    }
+  }
+
   .hidden {
     display: none;
   }
-  
-  // Preview info
-  .preview-info {
-    margin-top: 2rem;
-    border-top: 1px solid #e5e7eb; // gray-200
-    padding-top: 1rem;
-    font-size: 0.875rem;
-    color: $light-text-color;
-    
-    .preview-heading {
-      font-weight: bold;
-    }
-    
-    p {
-      margin-bottom: 0.25rem;
-    }
-  }
 }
 
-// Animations
 @keyframes pulse {
   0% {
     transform: scale(1);
-    opacity: 1;
   }
   50% {
-    transform: scale(1.05);
-    opacity: 0.8;
+    transform: scale(1.1);
   }
   100% {
     transform: scale(1);
-    opacity: 1;
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-20px);
+  }
+  60% {
+    transform: translateY(-10px);
   }
 }
