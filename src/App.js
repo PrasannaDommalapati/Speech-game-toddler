@@ -4,6 +4,9 @@ import LevelSelection from "./components/LevelSelection";
 import GameView from "./components/GameView";
 import ViewToggle from "./components/ViewToggle";
 import MileView from "./components/MileView";
+import elephant from "./assets/beginner/elephant.jpg";
+import cat from "./assets/beginner/cat.avif";
+import lion from "./assets/beginner/lion.avif";
 import "./App.scss";
 
 const App = () => {
@@ -15,7 +18,9 @@ const App = () => {
   // Sample questions for each level
   const questions = {
     beginner: [
-      { question: "What animal is this?", answer: "cat", image: "./assets/beginner/elephant.jpg" },
+      { question: "What animal is this?", answer: "lion", image: lion },
+      { question: "What animal is this?", answer: "cat", image: cat },
+      { question: "What animal is this?", answer: "elephant", image: elephant },
       {
         question: "What color is this?",
         answer: "red",
@@ -88,9 +93,9 @@ const App = () => {
       </header>
 
       {/* View Mode Toggle and Auto Listen Controls */}
-      <ViewToggle 
-        viewMode={viewMode} 
-        toggleViewMode={toggleViewMode} 
+      <ViewToggle
+        viewMode={viewMode}
+        toggleViewMode={toggleViewMode}
         selectedLevel={selectedLevel}
         autoListenEnabled={autoListenEnabled}
         setAutoListenEnabled={setAutoListenEnabled}
@@ -98,16 +103,14 @@ const App = () => {
 
       {/* Mile View (if selected) */}
       {viewMode === "mile" && selectedLevel && (
-        <MileView 
-          questions={questions[selectedLevel]} 
-          currentQuestion={currentQuestion} 
+        <MileView
+          questions={questions[selectedLevel]}
+          currentQuestion={currentQuestion}
         />
       )}
 
       {/* Level Selection */}
-      {!selectedLevel && (
-        <LevelSelection setSelectedLevel={setSelectedLevel} />
-      )}
+      {!selectedLevel && <LevelSelection setSelectedLevel={setSelectedLevel} />}
 
       {/* Game View */}
       {selectedLevel && (
@@ -120,17 +123,6 @@ const App = () => {
           moveToNextQuestion={moveToNextQuestion}
         />
       )}
-
-      {/* Preview Info */}
-      <div className="preview-info">
-        <p className="preview-heading">Preview Mode:</p>
-        <p>
-          This is a functional preview of the speech learning app with audio
-          features.
-        </p>
-        <p>The app now reads questions aloud and provides audio feedback.</p>
-        <p>Click the repeat button next to the question to hear it again.</p>
-      </div>
     </div>
   );
 };

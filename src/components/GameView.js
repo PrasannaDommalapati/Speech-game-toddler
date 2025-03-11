@@ -2,7 +2,11 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import QuestionDisplay from "./QuestionDisplay";
 import FeedbackArea from "./FeedbackArea";
-import { speakText, startSpeechRecognition, playCelebrationSound } from "../utils/speechHelpers";
+import {
+  speakText,
+  startSpeechRecognition,
+  playCelebrationSound,
+} from "../utils/speechHelpers";
 
 const GameView = ({
   level,
@@ -10,7 +14,7 @@ const GameView = ({
   currentQuestion,
   autoListenEnabled,
   handleBackToLevels,
-  moveToNextQuestion
+  moveToNextQuestion,
 }) => {
   const [attempts, setAttempts] = useState(0);
   const [feedback, setFeedback] = useState("");
@@ -21,7 +25,7 @@ const GameView = ({
   // Function to speak the current question
   const speakQuestion = useCallback(() => {
     const currentQ = questions[currentQuestion].question;
-    
+
     const utterance = speakText(currentQ, {
       rate: 0.9,
       pitch: 1.2,
@@ -30,9 +34,9 @@ const GameView = ({
         if (autoListenEnabled) {
           setTimeout(() => startListening(), 500);
         }
-      }
+      },
     });
-    
+
     return () => {
       if (utterance && "speechSynthesis" in window) {
         window.speechSynthesis.cancel();
@@ -41,70 +45,75 @@ const GameView = ({
   }, [questions, currentQuestion, autoListenEnabled]);
 
   // Process the user's voice input
-  const processVoiceInput = useCallback((userInput) => {
-    const correctAnswer = questions[currentQuestion].answer.toLowerCase();
-    
-    if (userInput.toLowerCase().includes(correctAnswer)) {
-      // Play celebration sound/speech
-      playCelebrationSound();
-      
-      const successMessage = `Hurray! "${userInput}" is correct!`;
-      setFeedback(successMessage);
-      
-      speakText(successMessage, { 
-        pitch: 1.4, 
-        rate: 1.1 
-      });
-      
-      setTimeout(() => {
-        moveToNextQuestion();
-        setAttempts(0);
-        setFeedback("");
-        setUserAnswer("");
-      }, 3000);
-    } else {
-      const newAttempts = attempts + 1;
-      setAttempts(newAttempts);
-      
-      if (newAttempts >= 5) {
-        const failMessage = `I heard "${userInput}". Let's try the next question. The correct answer was "${correctAnswer}".`;
-        setFeedback(failMessage);
-        
-        speakText(failMessage, { 
-          pitch: 0.9, 
-          rate: 0.9 
+  const processVoiceInput = useCallback(
+    (userInput) => {
+      const correctAnswer = questions[currentQuestion].answer.toLowerCase();
+
+      if (userInput.toLowerCase().includes(correctAnswer)) {
+        // Play celebration sound/speech
+        playCelebrationSound();
+
+        const successMessage = `Hurray! "${userInput}" is correct!`;
+        setFeedback(successMessage);
+
+        speakText(successMessage, {
+          pitch: 1.4,
+          rate: 1.1,
         });
-        
+
         setTimeout(() => {
           moveToNextQuestion();
           setAttempts(0);
           setFeedback("");
           setUserAnswer("");
-        }, 4000);
-      } else {
-        const tryAgainMessage = `I heard "${userInput}". Try again! You have ${5 - newAttempts} attempts left.`;
-        setFeedback(tryAgainMessage);
-        
-        speakText(tryAgainMessage, { 
-          pitch: 0.9, 
-          rate: 0.9 
-        });
-        
-        setTimeout(() => {
-          setFeedback("");  // Clear feedback to trigger next listening cycle
-          setUserAnswer("");
         }, 3000);
+      } else {
+        const newAttempts = attempts + 1;
+        setAttempts(newAttempts);
+
+        if (newAttempts >= 5) {
+          const failMessage = `I heard "${userInput}". Let's try the next question. The correct answer was "${correctAnswer}".`;
+          setFeedback(failMessage);
+
+          speakText(failMessage, {
+            pitch: 0.9,
+            rate: 0.9,
+          });
+
+          setTimeout(() => {
+            moveToNextQuestion();
+            setAttempts(0);
+            setFeedback("");
+            setUserAnswer("");
+          }, 4000);
+        } else {
+          const tryAgainMessage = `I heard "${userInput}". Try again! You have ${
+            5 - newAttempts
+          } attempts left.`;
+          setFeedback(tryAgainMessage);
+
+          speakText(tryAgainMessage, {
+            pitch: 0.9,
+            rate: 0.9,
+          });
+
+          setTimeout(() => {
+            setFeedback(""); // Clear feedback to trigger next listening cycle
+            setUserAnswer("");
+          }, 3000);
+        }
       }
-    }
-  }, [questions, currentQuestion, attempts, moveToNextQuestion]);
+    },
+    [questions, currentQuestion, attempts, moveToNextQuestion]
+  );
 
   // Start the speech recognition process
   const startListening = useCallback(() => {
     setListening(true);
     setFeedback("I'm listening... Please say your answer!");
-    
+
     recognitionRef.current = startSpeechRecognition({
-      lang: 'en-US',
+      lang: "en-US",
       continuous: false,
       interimResults: false,
       onResult: (event) => {
@@ -116,19 +125,19 @@ const GameView = ({
       onError: (event) => {
         setListening(false);
         setFeedback("Sorry, I couldn't hear you. Try again.");
-        
+
         speakText("Sorry, I couldn't hear you. Try again.", {
           pitch: 0.9,
-          rate: 0.9
+          rate: 0.9,
         });
-        
+
         setTimeout(() => {
           setFeedback("");
         }, 2000);
       },
       onEnd: () => {
         setListening(false);
-      }
+      },
     });
   }, [processVoiceInput]);
 
@@ -156,7 +165,7 @@ const GameView = ({
       if ("speechSynthesis" in window) {
         window.speechSynthesis.cancel();
       }
-      
+
       // Cancel any ongoing speech recognition
       if (recognitionRef.current) {
         try {
@@ -177,15 +186,15 @@ const GameView = ({
           Question {currentQuestion + 1} of {questions.length}
         </div>
 
-        <QuestionDisplay 
-          question={questions[currentQuestion]} 
-          onRepeat={handleRepeatQuestion} 
+        <QuestionDisplay
+          question={questions[currentQuestion]}
+          onRepeat={handleRepeatQuestion}
         />
 
-        <FeedbackArea 
-          feedback={feedback} 
+        <FeedbackArea
+          feedback={feedback}
           userAnswer={userAnswer}
-          listening={listening} 
+          listening={listening}
         />
 
         <div className={`microphone ${listening ? "active" : ""}`}>
@@ -193,12 +202,9 @@ const GameView = ({
         </div>
 
         <div className="attempts-counter">Attempts: {attempts} / 5</div>
-        
+
         {!listening && autoListenEnabled === false && (
-          <button 
-            onClick={startListening} 
-            className="listen-button"
-          >
+          <button onClick={startListening} className="listen-button">
             Start Listening
           </button>
         )}
