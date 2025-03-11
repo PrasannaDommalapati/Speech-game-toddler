@@ -6,7 +6,12 @@ import ViewToggle from "./components/ViewToggle";
 import MileView from "./components/MileView";
 import elephant from "./assets/beginner/elephant.jpg";
 import cat from "./assets/beginner/cat.avif";
+import cow from "./assets/beginner/cow.avif";
 import lion from "./assets/beginner/lion.avif";
+import zebra from "./assets/intermediate/zebra.avif";
+import tiger from "./assets/beginner/Tiger.jpg";
+import giraffe from "./assets/beginner/giraffe.avif";
+import rhino from "./assets/beginner/rhino.avif";
 import "./App.scss";
 
 const App = () => {
@@ -17,22 +22,19 @@ const App = () => {
 
   // Sample questions for each level
   const questions = {
-    beginner: [
-      { question: "What animal is this?", answer: "lion", image: lion },
-      { question: "What animal is this?", answer: "cat", image: cat },
-      { question: "What animal is this?", answer: "elephant", image: elephant },
-      {
-        question: "What color is this?",
-        answer: "red",
-        image: "/api/placeholder/300/200",
-      },
-      {
-        question: "What shape is this?",
-        answer: "circle",
-        image: "/api/placeholder/300/200",
-      },
+    Beginner: [
+      { question: "What animal say MOO MOO?", answer: "COW", image: cow },
+      { question: "Who say Meow Meow?", answer: "CAT", image: cat },
+      { question: "Who say ROAR ROAR?", answer: "LION", image: lion },
+      { question: "What animal is this?", answer: "ELEPHANT", image: elephant },
+      { question: "WHat Animal is this?", answer: "GIRAFFE", image: giraffe },
+      { question: "Who say GIRR GIRR?", answer: "TIGER", image: tiger },
+      { question: "What animal is this?", answer: "RHINO", image: rhino },
+      { question: "What animal say MOO MOO?", answer: "cow", image: cow },
+      { question: "Who say Meow Meow?", answer: "cat", image: cat }
     ],
-    intermediate: [
+    Intermediate: [
+      { question: "What animal has white and black stripes?", answer: "ZEBRA", image: zebra },
       {
         question: "What are these animals called?",
         answer: "elephants",
@@ -49,7 +51,7 @@ const App = () => {
         image: "/api/placeholder/300/200",
       },
     ],
-    expert: [
+    Expert: [
       {
         question: "What is this animal's habitat?",
         answer: "ocean",
@@ -68,6 +70,14 @@ const App = () => {
     ],
   };
 
+  const shuffleArray = array=> array.sort(() => Math.random() - 0.5);
+
+  const shuffledQuestions = {
+    Beginner: shuffleArray([...questions.Beginner]),
+    Intermediate: shuffleArray([...questions.Intermediate]),
+    Expert: shuffleArray([...questions.Expert]),
+  };
+
   // Reset to level selection
   const handleBackToLevels = () => {
     setSelectedLevel(null);
@@ -81,7 +91,7 @@ const App = () => {
 
   // Move to next question
   const moveToNextQuestion = () => {
-    if (currentQuestion < questions[selectedLevel]?.length - 1) {
+    if (currentQuestion < shuffledQuestions[selectedLevel]?.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     }
   };
@@ -104,7 +114,7 @@ const App = () => {
       {/* Mile View (if selected) */}
       {viewMode === "mile" && selectedLevel && (
         <MileView
-          questions={questions[selectedLevel]}
+          questions={shuffledQuestions[selectedLevel]}
           currentQuestion={currentQuestion}
         />
       )}
@@ -116,7 +126,7 @@ const App = () => {
       {selectedLevel && (
         <GameView
           level={selectedLevel}
-          questions={questions[selectedLevel]}
+          questions={shuffledQuestions[selectedLevel]}
           currentQuestion={currentQuestion}
           autoListenEnabled={autoListenEnabled}
           handleBackToLevels={handleBackToLevels}

@@ -4,19 +4,19 @@ const LevelSelection = ({ setSelectedLevel }) => {
       <h2>Choose Your Level</h2>
       <div className="level-buttons">
         <button
-          onClick={() => setSelectedLevel("beginner")}
+          onClick={() => setSelectedLevel("Beginner")}
           className="level-button beginner"
         >
           Beginner
         </button>
         <button
-          onClick={() => setSelectedLevel("intermediate")}
+          onClick={() => setSelectedLevel("Intermediate")}
           className="level-button intermediate"
         >
           Intermediate
         </button>
         <button
-          onClick={() => setSelectedLevel("expert")}
+          onClick={() => setSelectedLevel("Expert")}
           className="level-button expert"
         >
           Expert
